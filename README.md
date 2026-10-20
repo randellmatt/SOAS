@@ -89,6 +89,14 @@ This alarm clock is customizable, full featured and smart for under €25,-. It'
 * Contrast based on brightness in the room
 * Local file as fallback when internet is not available
 
+### <a name='MusicAssistant'></a>Music Assistant
+SOAS is a Sendspin player, so Music Assistant discovers it like any other speaker in the house. Alarms and music are Music Assistant uris instead of stream urls. When the alarm goes off, or music is switched on, SOAS asks Home Assistant to run `music_assistant.play_media` with the selected uri on `ma_player_entity`, and Music Assistant streams it back over Sendspin. When Home Assistant can not be reached, or the stream does not start within about 30 seconds, the local alarm file is played instead.
+
+Setup:
+1. In Home Assistant, open Settings > Devices & services > ESPHome, select the clock, open its options and enable **Allow the device to perform Home Assistant actions**.
+2. After the first boot, look up the entity id of the clock in Music Assistant (Settings > Entities, search for the clock name) and set it as `ma_player_entity`.
+3. Add the Music Assistant uris of the items you want to the `alarm_media_uri` select, for example `library://album/1732`, and a friendly name for each to `alarm_media_name`, in the same order.
+
 ## <a name='Requirements'></a>Requirements
 * < €25,-
 * 3d printer (not included in the price)
@@ -173,16 +181,19 @@ substitutions:
   top_button_triple_press_enabled: "true" #Set to false to disable triple press on the top button
   top_button_double_press_enabled: "true" #Set to false to disable double press on the top button
   timezone: Europe/Amsterdam
+  ma_player_entity: "media_player.alarm_clock_soas" #entity id of this clock's player in Music Assistant
+  ma_enqueue: "replace" #how Music Assistant enqueues the media: play, replace, next, replace_next or add
 
 packages:
   remote_package_files:
-    url: https://github.com/skons/soas
+    url: https://github.com/randellmatt/soas
+    ref: main
     files: [alarm-clock-soas.yaml] #Review the modules section!
 
 esp32:
   board: esp32-s3-devkitc-1
   framework:
-    type: esp-idf #or arduino
+    type: esp-idf #Sendspin requires esp-idf
   flash_size: 16MB
 
 time:
@@ -194,15 +205,15 @@ time:
       - 2.pool.ntp.org
 
 select:
-  - id: !extend alarm_stream_url
-    options:
-      - "mp3 url to radio" #AAC seams to be making SOAS crash, FLAC or WAV will probably also work
-      - "mp3 url to radio #2"
+  - id: !extend alarm_media_uri
+    options: #Music Assistant uris, like library://radio/2, library://playlist/1000, library://album/1732 or library://track/7415
+      - "library://radio/2"
+      - "library://playlist/1000"
       - "Local" #By using the name and option Local, you can define the local file as alarm
-  - id: !extend alarm_stream_name
+  - id: !extend alarm_media_name
     options:
       - "Friendly name of the radio station"
-      - "Friendly name of the radio station #2"
+      - "Friendly name of the playlist"
       - "Local"
 
 esphome:
@@ -433,7 +444,7 @@ Double click will enable or disable the sleep timer.
 
 ### <a name='Radiopage'></a>Radio page
 
-Enter edit mode with a rotary button single click to select the station that will be used for the radio. Switching to a radio station means the radio will go on. Selecting the radio station will also switch the radio off.
+Enter edit mode with a rotary button single click to select the Music Assistant media (radio, playlist, album or track) that will be used for the radio and the alarm. Switching to a radio station means the radio will go on. Selecting the radio station will also switch the radio off.
 
 ### <a name='Volumeandcontrastpages'></a>Volume and contrast pages
 
