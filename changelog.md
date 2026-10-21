@@ -1,5 +1,18 @@
 # Changelog
 
+## Unreleased
+- **BREAKING** Alarm and music now come from Music Assistant over Sendspin. Stream urls are removed.
+- **BREAKING** `alarm_stream_url` and `alarm_stream_name` are replaced by `alarm_media_uri` and `alarm_media_name`, which take Music Assistant uris such as `library://track/7415`
+- **BREAKING** esp-idf is required, the media player is now `speaker_source` with a Sendspin, local file and announcement source
+- Added the `ma_player_entity` and `ma_enqueue` substitutions
+- The device needs **Allow the device to perform Home Assistant actions** enabled in the ESPHome integration
+- Stopping the alarm or music also stops Music Assistant playback on the clock
+- Fixed snooze not working when the alarm goes off while an earlier snooze is still running
+- Sendspin state is set back to synchronized when the clock goes idle and before each Music Assistant request. After a local stop Music Assistant would otherwise not send a stream, also not when playing from the browser or a group
+- Falls back to the local alarm file when Home Assistant is not connected, or after about 40 seconds without a stream. The watchdog waits 20 seconds after each request, so a slow Music Assistant start is not restarted
+- The watchdog leaves the local alarm file loop alone, so "Local" music no longer switches off after a few seconds
+- Use a wav file for the local alarm sound. With the new media player, flac and mp3 files stop decoding after a fraction of a second and sound choppy
+
 ## 2026.8.14.1
 - **BREAKING** Removed the yaml files for esp-idf and arduino
 - **BREAKING** Removed the audio-server and both RTTTL modules
