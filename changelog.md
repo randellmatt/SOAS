@@ -10,6 +10,8 @@
 - Fixed snooze not working when the alarm goes off while an earlier snooze is still running
 - Sendspin state is set back to synchronized when the clock goes idle and before each Music Assistant request. After a local stop Music Assistant would otherwise not send a stream, also not when playing from the browser or a group
 - Falls back to the local alarm file when Home Assistant is not connected, or after about 40 seconds without a stream. The watchdog waits 20 seconds after each request, so a slow Music Assistant start is not restarted
+- The watchdog leaves the local alarm file loop alone, so "Local" music no longer switches off after a few seconds
+- The local alarm file should be FLAC or a low bitrate mp3. A 256 kbps mp3 can crash the local file decoder
 
 ## 2026.8.14.1
 - **BREAKING** Removed the yaml files for esp-idf and arduino

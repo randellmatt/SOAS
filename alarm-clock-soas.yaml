@@ -2897,6 +2897,9 @@ script:
             }
           }
           else if ((id(media_player_alarm).state == 0 || id(media_player_alarm).state == 1) && (id(alarm_on).state || id(music_on).state)) {
+            if (id(alarm_on_local).state) {
+              return; //the local file loop restarts itself, short gaps between plays are expected
+            }
             ESP_LOGD("media_player_watchdog", "Media player is not playing, alarm_on or music_on are switched on");
             int secondsSinceRequest = id(ntp).now().timestamp - id(ma_request_timestamp);
             if (secondsSinceRequest < 20) { //Music Assistant can take a while to start the Sendspin stream, a new request would restart it
