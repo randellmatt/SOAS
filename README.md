@@ -1,4 +1,6 @@
-# [System Of Alarm Sound - A cheap full featured alarm clock](https://community.home-assistant.io/t/soas-full-featured-alarm-clock-with-home-assistant-integration/847108)
+# [System Of Alarm Sound - A cheap full featured alarm clock - Music Assistant enabled version](https://community.home-assistant.io/t/soas-full-featured-alarm-clock-with-home-assistant-integration/847108)
+
+> **Credit:** this is a fork of [SOAS by Skons](https://github.com/Skons/SOAS). The hardware design, the case, the display, the alarm logic and almost all of this README are their work. This version changes alarms and music to come from Music Assistant over Sendspin, so the clock works like any other speaker in your home audio setup. See [Music Assistant](#MusicAssistant) for what's different. For the original version, issues and the community thread, go to the [original repository](https://github.com/Skons/SOAS).
 
 |                                                                     |                             |
 |---------------------------------------------------------------------|-----------------------------|
