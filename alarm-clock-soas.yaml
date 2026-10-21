@@ -179,6 +179,9 @@ globals:
     type: std::string
     initial_value: '""'
     restore_value: yes
+  - id: ma_request_timestamp
+    type: int
+    initial_value: '0'
 
 interval:
   - interval: 10s
@@ -2889,12 +2892,15 @@ script:
           }
           else if ((id(media_player_alarm).state == 0 || id(media_player_alarm).state == 1) && (id(alarm_on).state || id(music_on).state)) {
             ESP_LOGD("media_player_watchdog", "Media player is not playing, alarm_on or music_on are switched on");
+            int secondsSinceRequest = id(ntp).now().timestamp - id(ma_request_timestamp);
+            if (secondsSinceRequest < 20) { //Music Assistant can take a while to start the Sendspin stream, a new request would restart it
+              ESP_LOGD("media_player_watchdog", "Waiting for Music Assistant, requested %i seconds ago", secondsSinceRequest);
+              return;
+            }
             id(media_player_watchdog_count) = id(media_player_watchdog_count) + 1;
-            if (id(media_player_watchdog_count) < 6) { //Music Assistant needs a few seconds to start the Sendspin stream, retry every 10 seconds
-              if (id(media_player_watchdog_count) % 2 == 0) {
-                ESP_LOGD("media_player_watchdog", "Media player should be playing, trying to play the configured media for count %i", id(media_player_watchdog_count));
-                id(play_ma).execute(false);
-              }
+            if (id(media_player_watchdog_count) < 2) {
+              ESP_LOGD("media_player_watchdog", "Media player should be playing, trying to play the configured media for count %i", id(media_player_watchdog_count));
+              id(play_ma).execute(false);
             }
             else if (id(alarm_on).state) {
               ESP_LOGW("media_player_watchdog", "Failed to start stream, enabling alarm_on_local");
@@ -2969,7 +2975,9 @@ script:
                         media_id: "{{ media_id }}"
                       variables:
                         media_id: !lambda 'return id(media_uri);'
-                  - lambda: 'ESP_LOGD("play_ma", "Requested %s on ${ma_player_entity}", id(media_uri).c_str());'
+                  - lambda: |-
+                      id(ma_request_timestamp) = id(ntp).now().timestamp;
+                      ESP_LOGD("play_ma", "Requested %s on ${ma_player_entity}", id(media_uri).c_str());
                 else:
                   - logger.log:
                       format: "Home Assistant is not connected, can not reach Music Assistant"

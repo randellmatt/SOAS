@@ -90,7 +90,7 @@ This alarm clock is customizable, full featured and smart for under €25,-. It'
 * Local file as fallback when internet is not available
 
 ### <a name='MusicAssistant'></a>Music Assistant
-SOAS is a Sendspin player, so Music Assistant discovers it like any other speaker in the house. Alarms and music are Music Assistant uris instead of stream urls. When the alarm goes off, or music is switched on, SOAS asks Home Assistant to run `music_assistant.play_media` with the selected uri on `ma_player_entity`, and Music Assistant streams it back over Sendspin. When Home Assistant can not be reached, or the stream does not start within about 30 seconds, the local alarm file is played instead.
+SOAS is a Sendspin player, so Music Assistant discovers it like any other speaker in the house. Alarms and music are Music Assistant uris instead of stream urls. When the alarm goes off, or music is switched on, SOAS asks Home Assistant to run `music_assistant.play_media` with the selected uri on `ma_player_entity`, and Music Assistant streams it back over Sendspin. When Home Assistant can not be reached, or the stream does not start within about 40 seconds, the local alarm file is played instead.
 
 Setup:
 1. In Home Assistant, open Settings > Devices & services > ESPHome, select the clock, open its options and enable **Allow the device to perform Home Assistant actions**.

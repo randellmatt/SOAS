@@ -7,7 +7,7 @@
 - Added the `ma_player_entity` and `ma_enqueue` substitutions
 - The device needs **Allow the device to perform Home Assistant actions** enabled in the ESPHome integration
 - Stopping the alarm or music also stops Music Assistant playback on the clock
-- Falls back to the local alarm file when Home Assistant is not connected, or after about 30 seconds without a stream
+- Falls back to the local alarm file when Home Assistant is not connected, or after about 40 seconds without a stream. The watchdog waits 20 seconds after each request, so a slow Music Assistant start is not restarted
 
 ## 2026.8.14.1
 - **BREAKING** Removed the yaml files for esp-idf and arduino
