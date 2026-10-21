@@ -1429,6 +1429,9 @@ media_player:
       - logger.log: "Playback paused!"
     on_idle:
       - logger.log: "Playback finished!"
+      - lambda: |-
+          //a local stop sets Sendspin to EXTERNAL_SOURCE, clear it so Music Assistant can push to the clock again (browser, groups)
+          id(sendspin_hub).update_state(sendspin::SendspinClientState::SYNCHRONIZED);
     on_turn_off:
       - logger.log: "Playback turned off!"
 
