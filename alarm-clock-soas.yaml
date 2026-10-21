@@ -2966,6 +2966,9 @@ script:
                 condition:
                   api.connected:
                 then:
+                  - lambda: |-
+                      //a local stop sets Sendspin to EXTERNAL_SOURCE, Music Assistant will not stream to us until that is cleared
+                      id(sendspin_hub).update_state(sendspin::SendspinClientState::SYNCHRONIZED);
                   - homeassistant.action:
                       action: music_assistant.play_media
                       data:

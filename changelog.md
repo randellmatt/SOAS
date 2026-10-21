@@ -7,6 +7,7 @@
 - Added the `ma_player_entity` and `ma_enqueue` substitutions
 - The device needs **Allow the device to perform Home Assistant actions** enabled in the ESPHome integration
 - Stopping the alarm or music also stops Music Assistant playback on the clock
+- Sendspin state is set back to synchronized before each Music Assistant request, after a local stop Music Assistant would otherwise not send a stream
 - Falls back to the local alarm file when Home Assistant is not connected, or after about 40 seconds without a stream. The watchdog waits 20 seconds after each request, so a slow Music Assistant start is not restarted
 
 ## 2026.8.14.1
