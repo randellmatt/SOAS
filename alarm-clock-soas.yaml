@@ -182,6 +182,9 @@ globals:
   - id: ma_request_timestamp
     type: int
     initial_value: '0'
+  - id: music_from_ma #music was started from Music Assistant, not from the clock
+    type: bool
+    initial_value: 'false'
 
 interval:
   - interval: 10s
@@ -2893,7 +2896,9 @@ script:
             id(media_player_watchdog_count) = id(media_player_watchdog_count) + 1;
             if (id(media_player_watchdog_count) > 1) {
               ESP_LOGD("media_player_watchdog", "Media player is playing, media_player_watchdog_count is %i, enabling music_on", id(media_player_watchdog_count));
+              id(media_player_watchdog_count) = 0;
               id(music_on).turn_on();
+              id(music_from_ma) = true;
             }
           }
           else if ((id(media_player_alarm).state == 0 || id(media_player_alarm).state == 1) && (id(alarm_on).state || id(music_on).state)) {
@@ -2901,6 +2906,17 @@ script:
               return; //the local file loop restarts itself, short gaps between plays are expected
             }
             ESP_LOGD("media_player_watchdog", "Media player is not playing, alarm_on or music_on are switched on");
+            if (id(music_from_ma) && !id(alarm_on).state) { //Music Assistant goes idle between tracks, only switch off when it stays idle
+              id(media_player_watchdog_count) = id(media_player_watchdog_count) + 1;
+              if (id(media_player_watchdog_count) < 2) {
+                ESP_LOGD("media_player_watchdog", "Music Assistant playback is idle, waiting for the next track");
+                return;
+              }
+              ESP_LOGD("media_player_watchdog", "Music Assistant playback stopped, switching off music_on");
+              id(music_from_ma) = false;
+              id(music_on).turn_off();
+              return;
+            }
             int secondsSinceRequest = id(ntp).now().timestamp - id(ma_request_timestamp);
             if (secondsSinceRequest < 20) { //Music Assistant can take a while to start the Sendspin stream, a new request would restart it
               ESP_LOGD("media_player_watchdog", "Waiting for Music Assistant, requested %i seconds ago", secondsSinceRequest);
@@ -2952,6 +2968,7 @@ script:
       from_cache: bool
     then:
       - lambda: |-
+          id(music_from_ma) = false;
           std::string mediaUri = id(alarm_media_uri).current_option();
           ESP_LOGD("play_ma", "Configured media uri %s", mediaUri.c_str());
           if (strcmp(mediaUri.c_str(), "Local") == 0) {

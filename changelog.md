@@ -12,6 +12,7 @@
 - Falls back to the local alarm file when Home Assistant is not connected, or after about 40 seconds without a stream. The watchdog waits 20 seconds after each request, so a slow Music Assistant start is not restarted
 - The watchdog leaves the local alarm file loop alone, so "Local" music no longer switches off after a few seconds
 - Use a wav file for the local alarm sound. With the new media player, flac and mp3 files stop decoding after a fraction of a second and sound choppy
+- Changing tracks from Music Assistant no longer starts the local alarm sound in the short pause between tracks. Music started from Music Assistant switches music_on off once playback stays stopped
 
 ## 2026.8.14.1
 - **BREAKING** Removed the yaml files for esp-idf and arduino
