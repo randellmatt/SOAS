@@ -233,7 +233,7 @@ Save the `fonts` folder into your ESPHome folder. The folder needs to be placed 
 
 Edit the `select` options with a stream URL and the name of the stream. To get some streams, install [radio browser](https://www.home-assistant.io/integrations/radio_browser/). Select a stream, send it to the clock and look at the ESPHome logging to view the URL of that stream.
 
-Edit `alarm_file` to have your own local alarm. You can use mp3, wav or a flac file.
+Edit `alarm_file` to have your own local alarm. Use a wav file, for example mono 22050 Hz 16 bit (`ffmpeg -i sound.mp3 -ac 1 -ar 22050 -c:a pcm_s16le sound.wav`). Flac and mp3 files sound choppy with the Music Assistant media player.
 
 ### <a name='Modules'></a>Modules
 
