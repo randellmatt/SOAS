@@ -7,6 +7,7 @@
 - Added the `ma_player_entity` and `ma_enqueue` substitutions
 - The device needs **Allow the device to perform Home Assistant actions** enabled in the ESPHome integration
 - Stopping the alarm or music also stops Music Assistant playback on the clock
+- Fixed snooze not working when the alarm goes off while an earlier snooze is still running
 - Sendspin state is set back to synchronized when the clock goes idle and before each Music Assistant request. After a local stop Music Assistant would otherwise not send a stream, also not when playing from the browser or a group
 - Falls back to the local alarm file when Home Assistant is not connected, or after about 40 seconds without a stream. The watchdog waits 20 seconds after each request, so a slow Music Assistant start is not restarted
 
