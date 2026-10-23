@@ -646,6 +646,9 @@ binary_sensor:
               } else {
                 if (id(alarm_on).state) {
                   ESP_LOGD("alarm_off", "single click snooze on");
+                  if (id(snooze_on).state) { //an earlier snooze is still running, turn_on would not trigger and the alarm keeps sounding
+                    id(snooze_on).turn_off();
+                  }
                   id(snooze_on).turn_on();
                 }
                 else if (id(snooze_on).state) {
