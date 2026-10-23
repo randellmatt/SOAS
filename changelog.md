@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+- **BREAKING** The media player has moved to a module. Add `alarm-clock-url.yaml` to the `files:` property of `packages` to keep playing stream urls
+- Added the Music Assistant module `alarm-clock-music-assistant.yaml`, alarms and music are played from Music Assistant over Sendspin. Thanks @randellmatt
+
 ## 2026.10.23.1
 - **BREAKING** `play_on_switch_enabled` is added. Thanks @becast
 - All pages now have a title and description if needed

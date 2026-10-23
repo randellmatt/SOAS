@@ -25,7 +25,7 @@ substitutions:
 packages:
   remote_package_files:
     url: https://github.com/skons/soas
-    files: [alarm-clock-soas.yaml, alarm-clock-ds1307.yaml]
+    files: [alarm-clock-soas.yaml, alarm-clock-url.yaml, alarm-clock-ds1307.yaml]
 
 time:
   - id: !extend ntp
